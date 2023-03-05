@@ -23,7 +23,7 @@ def customer_home_view(request):
 
 
 
-# any one can add product to cart, no need of signin , op
+# any one can add product to cart, no need of signin
 def add_to_cart_view(request,pk):
     products=models.Product.objects.all()
 
@@ -31,7 +31,7 @@ def add_to_cart_view(request,pk):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(list(counter))
+        product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=1
 
@@ -61,7 +61,7 @@ def cart_view(request):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(list(counter))
+        product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=0
 
@@ -80,13 +80,12 @@ def cart_view(request):
     return render(request,'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
 
 
-
 def remove_from_cart_view(request,pk):
     #for counter in cart
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(list(counter))
+        product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=0
 
@@ -95,7 +94,7 @@ def remove_from_cart_view(request,pk):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         product_id_in_cart=product_ids.split('|')
-        product_id_in_cart=list(list(product_id_in_cart))
+        product_id_in_cart=list(set(product_id_in_cart))
         product_id_in_cart.remove(str(pk))
         products=models.Product.objects.all().filter(id__in = product_id_in_cart)
         #for total price shown in cart after removing product

@@ -16,7 +16,7 @@ def customer_home_view(request):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(list(counter))
+        product_count_in_cart=len(counter)
     else:
         product_count_in_cart=0
     return render(request,'ecom/customer_home.html',{'products':products,'product_count_in_cart':product_count_in_cart})
@@ -31,7 +31,7 @@ def add_to_cart_view(request,pk):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(list(counter))
+        product_count_in_cart=len(counter)
     else:
         product_count_in_cart=1
 
@@ -61,7 +61,7 @@ def cart_view(request):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(list(counter))
+        product_count_in_cart=len(counter)
     else:
         product_count_in_cart=0
 
@@ -86,6 +86,7 @@ def cart_view(request):
             # 1.0
             # for p in products:
                 # total=total+p.price
+                
     return render(request,'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
 
 
@@ -94,7 +95,7 @@ def remove_from_cart_view(request,pk):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(set(counter))
+        product_count_in_cart=len(counter)
     else:
         product_count_in_cart=0
 
@@ -103,12 +104,18 @@ def remove_from_cart_view(request,pk):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         product_id_in_cart=product_ids.split('|')
-        product_id_in_cart=list(set(product_id_in_cart))
+        # product_id_in_cart=list(set(product_id_in_cart))
         product_id_in_cart.remove(str(pk))
         products=models.Product.objects.all().filter(id__in = product_id_in_cart)
-        #for total price shown in cart after removing product
-        for p in products:
-            total=total+p.price
+        #for total price shown in cart
+        # 2.0
+        for x in product_id_in_cart:
+            my_obj = models.Product.objects.get(id=x)
+            total += my_obj.price
+            # products = products | models.Product.objects.get(id=x)
+        # 1.0
+        # for p in products:
+            # total=total+p.price
 
         #  for update coookie value after removing product id in cart
         value=""

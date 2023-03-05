@@ -31,7 +31,7 @@ def add_to_cart_view(request,pk):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(set(counter))
+        product_count_in_cart=len(list(counter))
     else:
         product_count_in_cart=1
 
@@ -61,7 +61,7 @@ def cart_view(request):
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
-        product_count_in_cart=len(set(counter))
+        product_count_in_cart=len(list(counter))
     else:
         product_count_in_cart=0
 
@@ -72,11 +72,20 @@ def cart_view(request):
         product_ids = request.COOKIES['product_ids']
         if product_ids != "":
             product_id_in_cart=product_ids.split('|')
-            products=models.Product.objects.all().filter(id__in = product_id_in_cart)
-
+            products=models.Product.objects.all().filter(id__in = product_id_in_cart)            
+            
+            
             #for total price shown in cart
-            for p in products:
-                total=total+p.price
+            # 2.0
+            for x in product_id_in_cart:
+                my_obj = models.Product.objects.get(id=x)
+                total += my_obj.price
+                # products = products | models.Product.objects.get(id=x)
+
+
+            # 1.0
+            # for p in products:
+                # total=total+p.price
     return render(request,'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
 
 

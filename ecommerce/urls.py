@@ -21,8 +21,8 @@ from django.contrib.auth.views import LoginView,LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('customer-home', views.customer_home_view,name='customer-home'),
-    path('', views.customer_home_view,name='customer-home'),
+    path('customer-home', views.customer_home_view,name='customer-home'),
+    # path('', views.customer_home_view,name='customer-home'),
     path('add-to-cart/<int:pk>', views.add_to_cart_view,name='add-to-cart'),
     path('cart', views.cart_view,name='cart'),
     path('remove-from-cart/<int:pk>', views.remove_from_cart_view,name='remove-from-cart')

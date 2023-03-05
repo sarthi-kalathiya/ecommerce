@@ -55,7 +55,7 @@ def add_to_cart_view(request,pk):
 
 
 
-# for checkout of cart
+# for checkout of cart purchase
 def cart_view(request):
     #for cart counter
     if 'product_ids' in request.COOKIES:

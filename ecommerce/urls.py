@@ -18,7 +18,6 @@ from django.urls import path
 from ecom import views
 from django.contrib.auth.views import LoginView,LogoutView
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('customer-home', views.customer_home_view,name='customer-home'),
@@ -27,5 +26,7 @@ urlpatterns = [
     path('cart', views.cart_view,name='cart'),
     path('remove-from-cart/<int:pk>', views.remove_from_cart_view,name='remove-from-cart'),
     path('customersignup', views.customer_signup_view),
-    path('aboutus', views.aboutus_view)
+    path('aboutus', views.aboutus_view),
+    path('customer-address', views.customer_address_view,name='customer-address'),
+    path('payment-success', views.payment_success_view,name='payment-success')
 ]

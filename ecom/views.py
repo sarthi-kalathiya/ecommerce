@@ -9,8 +9,9 @@ from django.conf import settings
 
 
 #---------------------------------------------------------------------------------
-#------------------------ CUSTOMER RELATED VIEWS START ------------------------------
+#------------------------ CUSTOMER RELATED VIEWS START ---------------------------
 #---------------------------------------------------------------------------------
+
 def customer_home_view(request):
     products=models.Product.objects.all()
     if 'product_ids' in request.COOKIES:
@@ -20,7 +21,6 @@ def customer_home_view(request):
     else:
         product_count_in_cart=0
     return render(request,'ecom/customer_home.html',{'products':products,'product_count_in_cart':product_count_in_cart})
-
 
 
 # any one can add product to cart, no need of signin
@@ -52,7 +52,6 @@ def add_to_cart_view(request,pk):
     messages.info(request, product.name + ' added to cart successfully!')
 
     return response
-
 
 
 # for checkout of cart purchase
@@ -129,3 +128,27 @@ def remove_from_cart_view(request,pk):
             response.delete_cookie('product_ids')
         response.set_cookie('product_ids',value)
         return response
+    
+    
+def customer_signup_view(request):
+    userForm = forms.CustomerUserForm()
+    customerForm = forms.CustomerForm()
+    mydict = {'userForm': userForm, 'customerForm': customerForm}
+    if request.method == 'POST':
+        userForm = forms.CustomerUserForm(request.POST)
+        customerForm = forms.CustomerForm(request.POST, request.FILES)
+        if userForm.is_valid() and customerForm.is_valid():
+            user = userForm.save()
+            user.set_password(user.password)
+            user.save()
+            customer = customerForm.save(commit=False)
+            customer.user = user
+            customer.save()
+            my_customer_group = Group.objects.get_or_create(name='CUSTOMER')
+            my_customer_group[0].user_set.add(user)
+        return HttpResponseRedirect('customerlogin')
+    return render(request, 'ecom/customersignup.html', context=mydict)
+
+
+def aboutus_view(request):
+    return render(request,'ecom/aboutus.html')

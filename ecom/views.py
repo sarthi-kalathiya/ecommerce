@@ -227,9 +227,7 @@ def payment_success_view(request):
     if 'address' in request.COOKIES:
         address=request.COOKIES['address']
 
-    # here we are placing number of orders as much there is a products
-    # suppose if we have 5 items in cart and we place order....so 5 rows will be created in orders table
-    # there will be lot of redundant data in orders table...but its become more complicated if we normalize it
+    
     
     # for product in products:
         # models.Orders.objects.get_or_create(customer=customer,product=product,status='Pending',email=email,mobile=mobile,address=address)

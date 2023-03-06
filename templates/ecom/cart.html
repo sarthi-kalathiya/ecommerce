@@ -75,18 +75,20 @@
           <th>Name</th>
           <th>Image</th>
           <th>Price</th>
+          <th>Quantity</th>
           <th>Description</th>
           <th>Remove From Cart</th>
 
         </tr>
       </thead>
-      {% for p in products %}
+      {% for p,q in combined %}
   {% if p %}
 
       <tr>
         <td> {{p.name}}</td>
         <td> <img src="{% static p.product_image.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
         <td>{{p.price}}</td>
+        <td>{{q}}</td>
         <td>{{p.description}}</td>
 
         <td><a class="btn btn-danger btn-xs" href="{% url 'remove-from-cart' p.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>

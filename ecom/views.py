@@ -235,6 +235,7 @@ def payment_success_view(request):
 
     # for product in products:
         # models.Orders.objects.get_or_create(customer=customer,product=product,status='Pending',email=email,mobile=mobile,address=address)
+    # new orders
 
     # after order placed cookies should be deleted
     response = render(request, 'ecom/payment_success.html')

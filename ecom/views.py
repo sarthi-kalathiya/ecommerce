@@ -106,13 +106,19 @@ def remove_from_cart_view(request, pk):
     # removing product id from cookie
     total = 0
     if 'product_ids' in request.COOKIES:
+        quantity = []
         product_ids = request.COOKIES['product_ids']
-        product_id_in_cart = product_ids.split('|')
+        product_id_in_cart = sorted(product_ids.split('|'))
         # product_id_in_cart=list(set(product_id_in_cart))
         # hello
-        product_id_in_cart.remove(str(pk)) 
+        product_id_in_cart.remove(str(pk))
+        product_id_in_cart_distinct = set(product_id_in_cart)
+        for x in product_id_in_cart_distinct:
+            temp = product_id_in_cart.count(x)
+            quantity.append(temp)
         products = models.Product.objects.all().filter(id__in=product_id_in_cart)
         # for total price shown in cart
+        combined = zip(products , quantity)
         # 2.0
         for x in product_id_in_cart:
             my_obj = models.Product.objects.get(id=x)
@@ -129,8 +135,7 @@ def remove_from_cart_view(request, pk):
                 value = value+product_id_in_cart[0]
             else:
                 value = value+"|"+product_id_in_cart[i]
-        response = render(request, 'ecom/cart.html', {
-                          'products': products, 'total': total, 'product_count_in_cart': product_count_in_cart})
+        response = render(request, 'ecom/cart.html', {'combined' : combined , 'total': total, 'product_count_in_cart': product_count_in_cart})
         if value == "":
             response.delete_cookie('product_ids')
         response.set_cookie('product_ids', value)

@@ -49,8 +49,8 @@ def add_to_cart_view(request, pk):
     else:
         response.set_cookie('product_ids', pk)
 
-    product = models.Product.objects.get(id=pk)
-    messages.info(request, product.name + ' added to cart successfully!')
+    #   product = models.Product.objects.get(id=pk)
+    # messages.info(request, product.name + ' added to cart successfully!')
 
     return response
 
@@ -109,7 +109,8 @@ def remove_from_cart_view(request, pk):
         product_ids = request.COOKIES['product_ids']
         product_id_in_cart = product_ids.split('|')
         # product_id_in_cart=list(set(product_id_in_cart))
-        product_id_in_cart.remove(str(pk))
+        # hello
+        product_id_in_cart.remove(str(pk)) 
         products = models.Product.objects.all().filter(id__in=product_id_in_cart)
         # for total price shown in cart
         # 2.0
